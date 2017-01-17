@@ -61,8 +61,10 @@ const preamble = `const __instrumenter = ` + JSON.stringify(__instrumenter, null
 
 function saveResults () {
   const fs = require('fs')
-  fs.writeFileSync('./results.json',
-    JSON.stringify(__instrumenter, null, 2) + '\n', 'utf8')
+  process.on('exit', function writeResults () {
+    fs.writeFileSync('./results.json',
+      JSON.stringify(__instrumenter, null, 2) + '\n', 'utf8')
+  })
 }
 const save = '(' + saveResults.toString() + '())\n'
 const sep = ';\n'
