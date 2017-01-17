@@ -1,4 +1,5 @@
 const falafel = require('falafel')
+const debug = require('debug')('comment-value')
 
 function instrumentSource (source) {
   // TODO handle multiple files by making this object global
@@ -16,11 +17,11 @@ function instrumentSource (source) {
     // TODO can also handle individual value
     if (node.type === 'ExpressionStatement' ||
       node.type === 'Identifier') {
-      console.log(node.type, node.end, node.source())
+      // console.log(node.type, node.end, node.source())
       if (endsBeforeInstrumentedComment(node)) {
-        console.log('need to instrument!')
+        // console.log('need to instrument!')
         const comment = findComment(node)
-        console.log(comment)
+        // console.log(comment)
         const reference = 'global.__instrumenter.comments[' + comment.index + '].value'
         const store = reference + ' = ' + node.source()
         const storeAndReturn = ';(function () {' + store + '; return ' + reference + '}())'
@@ -40,7 +41,7 @@ function instrumentSource (source) {
       if (!isInstrumentComment(text)) {
         return
       }
-      console.log('comment', arguments)
+      // console.log('comment', arguments)
       const index = __instrumenter.comments.length
       __instrumenter.comments.push({
         value: undefined,
@@ -53,8 +54,8 @@ function instrumentSource (source) {
     }
   }
   const output = falafel(source, parserOptions, instrument)
-  console.log('instrument comments')
-  console.log(__instrumenter.comments)
+  debug('instrumented for %d comments', __instrumenter.comments.length)
+  // console.log(__instrumenter.comments)
   const preamble = 'if (!global.__instrumenter) {global.__instrumenter=' +
     JSON.stringify(__instrumenter, null, 2) + '}\n'
   // console.log(preamble)

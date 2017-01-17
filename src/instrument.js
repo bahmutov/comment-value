@@ -1,7 +1,9 @@
 const instrumentSource = require('./instrument-source')
 const fs = require('fs')
+const debug = require('debug')('comment-value')
 
 function instrumentFile (filename, outputFilename) {
+  debug('instrumenting file %s', filename)
   const source = fs.readFileSync(filename, 'utf8')
   const instrumented = instrumentSource(source)
   // TODO move outside
