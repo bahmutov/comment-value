@@ -5,7 +5,7 @@ const debug = require('debug')('comment-value')
 function instrumentFile (filename, outputFilename) {
   debug('instrumenting file %s', filename)
   const source = fs.readFileSync(filename, 'utf8')
-  const instrumented = instrumentSource(source)
+  const instrumented = instrumentSource(source, filename)
   // TODO move outside
   function saveResults () {
     /* global __instrumenter */

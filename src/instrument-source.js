@@ -1,7 +1,7 @@
 const falafel = require('falafel')
 const debug = require('debug')('comment-value')
 
-function instrumentSource (source) {
+function instrumentSource (source, filename) {
   // TODO handle multiple files by making this object global
   // and avoiding overwriting it
   const __instrumenter = global.__instrumenter || {
@@ -49,7 +49,8 @@ function instrumentSource (source) {
         text: text,
         index: index,
         from: from,
-        to: to
+        to: to,
+        filename: filename
       })
     }
   }

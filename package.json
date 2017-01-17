@@ -70,7 +70,8 @@
     "instrument": "node src/instrument.js test/example.js",
     "update": "node src/update.js test/example.js",
     "start": "node instrumented.js",
-    "hook": "node -r ./src/index.js test/example.js"
+    "hook": "node -r ./src/index.js test/example.js",
+    "test-nested": "node -r ./src/index.js test/nested/index.js"
   },
   "devDependencies": {
     "ban-sensitive-files": "1.9.0",

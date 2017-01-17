@@ -11,8 +11,12 @@ function updateFile (filename) {
   const source = fs.readFileSync(filename, 'utf8')
   const results = require(path.join(process.cwd(), 'results.json'))
 
+  const forThisFile = comment => comment.filename === filename
+
   const lines = source.split('\n')
-  results.comments.forEach(updateComment)
+  results.comments
+    .filter(forThisFile)
+    .forEach(updateComment)
 
   function updateComment (c) {
     const commentStart = '//>'

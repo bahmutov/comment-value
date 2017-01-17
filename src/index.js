@@ -9,7 +9,7 @@ const instrumentedFiles = []
 function instrumentLoadedFiles (source, filename) {
   debug('instrumenting file %s', filename)
 
-  const instrumented = instrumentSource(source)
+  const instrumented = instrumentSource(source, filename)
   if (instrumented !== source) {
     instrumentedFiles.push(filename)
   }
