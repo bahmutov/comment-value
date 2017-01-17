@@ -19,8 +19,8 @@ function instrument (node) {
       console.log('need to instrument!')
       const comment = findComment(node)
       console.log(comment)
-      node.update('__instrumenter.comments[' + comment.index + '].value = '
-        + node.source())
+      const store = '__instrumenter.comments[' + comment.index + '].value = '
+      node.update(store + node.source())
     }
   }
 }
@@ -29,7 +29,7 @@ const isInstrumentComment = s => s.startsWith('>')
 
 const parserOptions = {
   locations: true,
-  onComment(block, text, start, end, from, to) {
+  onComment (block, text, start, end, from, to) {
     if (block) {
       return
     }
@@ -55,7 +55,7 @@ const preamble = `const __instrumenter = ` + JSON.stringify(__instrumenter, null
 // console.log(preamble)
 // console.log('output source\n' + output)
 
-function saveResults() {
+function saveResults () {
   const fs = require('fs')
   fs.writeFileSync('./results.json',
     JSON.stringify(__instrumenter, null, 2) + '\n', 'utf8')

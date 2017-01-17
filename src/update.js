@@ -6,7 +6,7 @@ const results = require('./results.json')
 const lines = source.split('\n')
 results.comments.forEach(updateComment)
 
-function updateComment(c) {
+function updateComment (c) {
   const commentStart = '//>'
   console.log('updating comment')
   console.log(c)
