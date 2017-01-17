@@ -44,6 +44,9 @@
   ],
   "license": "MIT",
   "main": "src/",
+  "bin": {
+    "comment-value": "src/index.js"
+  },
   "publishConfig": {
     "registry": "http://registry.npmjs.org/"
   },
