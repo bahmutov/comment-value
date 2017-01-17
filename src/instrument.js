@@ -17,7 +17,8 @@ const findComment = node =>
 
 function instrument (node) {
   // TODO can also handle individual value
-  if (node.type === 'ExpressionStatement') {
+  if (node.type === 'ExpressionStatement' ||
+    node.type === 'Identifier') {
     console.log(node.type, node.end, node.source())
     if (endsBeforeInstrumentedComment(node)) {
       console.log('need to instrument!')
