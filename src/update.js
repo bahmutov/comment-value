@@ -1,7 +1,8 @@
 const fs = require('fs')
-const SOURCE_FILENAME = './index.js'
+const path = require('path')
+const SOURCE_FILENAME = path.join(process.cwd(), process.argv[2])
 const source = fs.readFileSync(SOURCE_FILENAME, 'utf8')
-const results = require('./results.json')
+const results = require(path.join(process.cwd(), 'results.json'))
 
 const lines = source.split('\n')
 results.comments.forEach(updateComment)

@@ -1,6 +1,10 @@
 const falafel = require('falafel')
 const fs = require('fs')
-const source = fs.readFileSync('./index.js', 'utf8')
+const path = require('path')
+const sourceFilename = process.argv[2]
+console.log('updating comment values in', sourceFilename)
+const fullFilename = path.join(process.cwd(), sourceFilename)
+const source = fs.readFileSync(fullFilename, 'utf8')
 
 const __instrumenter = {
   comments: []

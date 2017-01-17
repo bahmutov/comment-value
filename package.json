@@ -59,13 +59,17 @@
     "deps": "deps-ok && dependency-check .",
     "issues": "git-issues",
     "license": "license-checker --production --onlyunknown --csv",
-    "lint": "standard --verbose --fix src/*.js test/*.js",
+    "lint": "standard --verbose --fix src/*.js",
     "pretest": "npm run lint",
     "secure": "nsp check",
     "size": "t=\"$(npm pack .)\"; wc -c \"${t}\"; tar tvf \"${t}\"; rm \"${t}\";",
-    "test": "npm run unit",
     "unit": "mocha src/*-spec.js",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "test": "npm run instrument && npm start && cat results.json && npm run update",
+    "posttest": "npm run unit",
+    "instrument": "node src/instrument.js test/example.js",
+    "update": "node src/update.js test/example.js",
+    "start": "node instrumented.js"
   },
   "devDependencies": {
     "ban-sensitive-files": "1.9.0",
