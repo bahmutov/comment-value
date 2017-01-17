@@ -24,8 +24,10 @@ function instrument (node) {
       console.log('need to instrument!')
       const comment = findComment(node)
       console.log(comment)
-      const store = '__instrumenter.comments[' + comment.index + '].value = '
-      node.update(store + node.source())
+      const reference = '__instrumenter.comments[' + comment.index + '].value'
+      const store = reference + ' = ' + node.source()
+      const storeAndReturn = ';(function () {' + store + '; return ' + reference + '}())'
+      node.update(storeAndReturn)
     }
   }
 }

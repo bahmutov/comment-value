@@ -3,6 +3,6 @@ Promise.resolve(42)
   //   x + x //> undefined
   // )
   .then(x =>
-    x //> undefined
+    x //> 42
   )
   .then(console.log)
