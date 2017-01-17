@@ -67,8 +67,8 @@
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "test": "npm run instrument && npm start && cat results.json && npm run update",
     "posttest": "npm run unit",
-    "instrument": "node src/instrument.js test/async-example.js",
-    "update": "node src/update.js test/async-example.js",
+    "instrument": "node src/instrument.js test/promise-example.js",
+    "update": "node src/update.js test/promise-example.js",
     "start": "node instrumented.js"
   },
   "devDependencies": {
