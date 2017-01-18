@@ -26,6 +26,13 @@ When Node finishes, the file is saved back with updated comments.
 
 Click on the above screen shot to see 15 second demo clip.
 
+## Watch mode
+
+Automatically (well, as long as `chokidar` works) reruns and updates comments
+in the source file. See the
+[video](https://glebbahmutov.com/comment-value/comment-value-watch-mode.webm),
+it is awesome!
+
 ## Install and use
 
 Install `comment-value` either as a global or as a local package.
