@@ -32,6 +32,10 @@ add(2, -3) //> ? anything here
 $ node -r comment-value index.js
 # or shorter
 $ comment-value index.js
+# or even shorter
+$ values index.js
+# or the shortest
+$ cv index.js
 ```
 
 The `index.js` will now contain

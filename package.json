@@ -46,7 +46,9 @@
   "license": "MIT",
   "main": "src/",
   "bin": {
-    "comment-value": "bin/comment-value.sh"
+    "cv": "bin/comment-value.sh",
+    "comment-value": "bin/comment-value.sh",
+    "values": "bin/comment-value.sh"
   },
   "publishConfig": {
     "registry": "http://registry.npmjs.org/"
@@ -58,7 +60,7 @@
   },
   "scripts": {
     "ban": "ban",
-    "deps": "deps-ok && dependency-check .",
+    "deps": "deps-ok",
     "issues": "git-issues",
     "license": "license-checker --production --onlyunknown --csv",
     "lint": "standard --verbose --fix src/*.js",
