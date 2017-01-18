@@ -4,12 +4,16 @@ const la = require('lazy-ass')
 const is = require('check-more-types')
 const debug = require('debug')('comment-value')
 
-function updateFile (filename) {
+function updateFile (filename, results) {
   debug('updating comment values in file %s', filename)
   la(is.unemptyString(filename), 'missing filename', filename)
 
   const source = fs.readFileSync(filename, 'utf8')
-  const results = require(path.join(process.cwd(), 'results.json'))
+  if (!results) {
+    const resultsFilename = path.join(process.cwd(), 'results.json')
+    debug('loading results from file %s', resultsFilename)
+    results = require(resultsFilename)
+  }
 
   const forThisFile = comment => comment.filename === filename
 
