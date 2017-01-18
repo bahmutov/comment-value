@@ -38,9 +38,13 @@ function updateFile (filename, results) {
   }
 
   const updatedSource = lines.join('\n')
-  // console.log('updated source')
-  // console.log(updatedSource)
-  fs.writeFileSync(filename, updatedSource, 'utf8')
+
+  if (updatedSource !== source) {
+    debug('updated source is different in %s', filename)
+    fs.writeFileSync(filename, updatedSource, 'utf8')
+  } else {
+    debug('file %s is the same as before, not overwriting', filename)
+  }
 }
 
 module.exports = updateFile
