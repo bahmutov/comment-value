@@ -10,16 +10,33 @@
 
 ## Why?
 
-TODO explain values in comments
+Writing and maintaining code examples is hard. Often the values shown in
+the comments (think blog posts) are out of date and incorrect.
 
-## Use
+## What does comment-value do?
+
+`comment-value` or `values` for short executes your Node program,
+instrumenting it on the fly. Every time it sees a special comment that
+starts with `//>`, it will set it value from whatever the expression
+immediately to its left is.
+
+When Node finishes, the file is saved back with updated comments.
+
+## Install and use
 
 Install `comment-value` either as a global or as a local package.
-Then run your program using `node -r comment-value <index filename.js>`.
-Any comment starting with `//>` will be updated with the run time value
-of the expression to its left.
+
+```
+npm install -g comment-value
+```
+
+Use either using `node -r comment-value index.js` or via CLI alias:
+`comment-value`, `values` or `cv` like this `values index.js`.
 
 ## Example
+
+Add a few comments that start with `//>` to `index.js`. You can put anything
+after that into the comment.
 
 ```js
 // index.js
@@ -28,14 +45,10 @@ add(2, 3) //>
 add(2, -3) //> ? anything here
 ```
 
+Run the `comment-value` script which runs your Node
+
 ```sh
-$ node -r comment-value index.js
-# or shorter
 $ comment-value index.js
-# or even shorter
-$ values index.js
-# or the shortest
-$ cv index.js
 ```
 
 The `index.js` will now contain
