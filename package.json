@@ -50,7 +50,7 @@
   "bin": {
     "cv": "bin/comment-value.sh",
     "comment-value": "bin/comment-value.sh",
-    "values": "bin/comment-value.sh"
+    "values": "bin/comment-value.js"
   },
   "publishConfig": {
     "registry": "http://registry.npmjs.org/"
@@ -94,6 +94,8 @@
   },
   "dependencies": {
     "check-more-types": "2.23.0",
+    "commander": "2.9.0",
+    "cross-spawn": "5.0.1",
     "debug": "2.6.0",
     "falafel": "2.0.0",
     "lazy-ass": "1.5.0",
