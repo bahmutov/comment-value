@@ -22,6 +22,8 @@ immediately to its left is.
 
 When Node finishes, the file is saved back with updated comments.
 
+![Running comment-value on a file](images/comment-value.png)
+
 ## Install and use
 
 Install `comment-value` either as a global or as a local package.
