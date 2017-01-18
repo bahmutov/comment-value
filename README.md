@@ -24,6 +24,8 @@ When Node finishes, the file is saved back with updated comments.
 
 [![comment-value in action](images/comment-value.png)](https://comment-values-awgxclhogn.now.sh/comment-values.webm)
 
+Click on the above screen shot to see 15 second demo clip.
+
 ## Install and use
 
 Install `comment-value` either as a global or as a local package.
