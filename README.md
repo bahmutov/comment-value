@@ -22,7 +22,7 @@ immediately to its left is.
 
 When Node finishes, the file is saved back with updated comments.
 
-![Running comment-value on a file](images/comment-value.png)
+[![comment-value in action](images/comment-value.png)](https://comment-values-awgxclhogn.now.sh/comment-values.webm)
 
 ## Install and use
 
