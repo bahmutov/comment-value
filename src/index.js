@@ -5,7 +5,12 @@ const debug = require('debug')('comment-value')
 
 const instrumentedFiles = []
 
+const isNodeModules = filename => filename.includes('node_modules')
+
 function instrumentLoadedFiles (source, filename) {
+  if (isNodeModules(filename)) {
+    return source
+  }
   debug('instrumenting file %s', filename)
 
   const instrumented = instrumentSource(source, filename)
