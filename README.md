@@ -29,7 +29,9 @@ add(2, -3) //> ? anything here
 ```
 
 ```sh
-node -r comment-value index.js
+$ node -r comment-value index.js
+# or shorter
+$ comment-value index.js
 ```
 
 The `index.js` will now contain

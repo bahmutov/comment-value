@@ -28,7 +28,8 @@
   },
   "files": [
     "src/*.js",
-    "!src/*-spec.js"
+    "!src/*-spec.js",
+    "bin"
   ],
   "homepage": "https://github.com/bahmutov/comment-value#readme",
   "keywords": [
@@ -45,11 +46,12 @@
   "license": "MIT",
   "main": "src/",
   "bin": {
-    "comment-value": "src/index.js"
+    "comment-value": "bin/comment-value.sh"
   },
   "publishConfig": {
     "registry": "http://registry.npmjs.org/"
   },
+  "preferGlobal": true,
   "repository": {
     "type": "git",
     "url": "https://github.com/bahmutov/comment-value.git"
