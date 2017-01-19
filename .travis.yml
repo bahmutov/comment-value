@@ -12,6 +12,7 @@ script:
   - npm test
   - DEBUG=comment-value npm run hook
   - DEBUG=comment-value npm run test-nested
+  - npm run test-symbols
 after_success:
   - npm run semantic-release
 branches:

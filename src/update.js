@@ -23,7 +23,8 @@ function updateFile (filename, results) {
     .forEach(updateComment)
 
   function updateComment (c) {
-    const commentStart = '//>'
+    const commentStart = c.commentStart
+    la(is.unemptyString(commentStart), 'missing comment start', c)
     // console.log('updating comment')
     // console.log(c)
     // line starts with 1

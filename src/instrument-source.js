@@ -1,5 +1,11 @@
+const la = require('lazy-ass')
+const is = require('check-more-types')
 const falafel = require('falafel')
 const debug = require('debug')('comment-value')
+const commentStarts = require('./comments').starts
+const R = require('ramda')
+
+la(is.strings(commentStarts), 'invalid comment starts', commentStarts)
 
 function instrumentSource (source, filename) {
   // TODO handle multiple files by making this object global
@@ -30,7 +36,8 @@ function instrumentSource (source, filename) {
     }
   }
 
-  const isInstrumentComment = s => s.startsWith('>')
+  const findCommentValue = s =>
+    R.find(c => s.startsWith(c), commentStarts)
 
   const parserOptions = {
     locations: true,
@@ -38,19 +45,21 @@ function instrumentSource (source, filename) {
       if (block) {
         return
       }
-      if (!isInstrumentComment(text)) {
+      const commentStart = findCommentValue(text)
+      if (!commentStart) {
         return
       }
       // console.log('comment', arguments)
       const index = __instrumenter.comments.length
       __instrumenter.comments.push({
         value: undefined,
-        start: start,
-        text: text,
-        index: index,
-        from: from,
-        to: to,
-        filename: filename
+        start,
+        text,
+        index,
+        from,
+        to,
+        filename,
+        commentStart
       })
     }
   }

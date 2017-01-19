@@ -71,6 +71,10 @@ add(2, 3) //> 5
 add(2, -3) //> -1
 ```
 
+## Comment format
+
+You can start comments to be updated with `//>` or `//=>`.
+
 ## Debug
 
 To see verbose messages while this module runs, set the environment
