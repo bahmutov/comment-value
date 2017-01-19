@@ -19,19 +19,36 @@ function instrumentSource (source, filename) {
   const findComment = node =>
     __instrumenter.comments.find(c => c.start === node.end + 1)
 
+  const isConsoleLog = node =>
+    node.expression &&
+      node.expression.type === 'CallExpression' &&
+      node.expression.callee.type === 'MemberExpression' &&
+      node.expression.callee.object.name === 'console' &&
+      node.expression.callee.property.name === 'log'
+
   function instrument (node) {
     // TODO can also handle individual value
     if (node.type === 'ExpressionStatement' ||
       node.type === 'Identifier') {
       // console.log(node.type, node.end, node.source())
+
       if (endsBeforeInstrumentedComment(node)) {
-        // console.log('need to instrument!')
+        // console.log('need to instrument', node.type, node.source())
         const comment = findComment(node)
-        // console.log(comment)
         const reference = 'global.__instrumenter.comments[' + comment.index + '].value'
-        const store = reference + ' = ' + node.source()
-        const storeAndReturn = ';(function () {' + store + '; return ' + reference + '}())'
-        node.update(storeAndReturn)
+        if (isConsoleLog(node)) {
+          debug('instrumenting console.log', node.source())
+          // instrument inside the console.log (the first argument)
+          const store = reference + ' = ' + node.expression.arguments[0].source()
+          const storeAndReturn = '(function () {' + store + '; return ' + reference + '}())'
+          const printStored = 'console.log(' + storeAndReturn + ')'
+          node.update(printStored)
+        } else {
+          // console.log(comment)
+          const store = reference + ' = ' + node.source()
+          const storeAndReturn = ';(function () {' + store + '; return ' + reference + '}())'
+          node.update(storeAndReturn)
+        }
       }
     }
   }

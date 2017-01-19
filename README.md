@@ -75,6 +75,26 @@ add(2, -3) //> -1
 
 You can start comments to be updated with `//>` or `//=>`.
 
+## Console log statements
+
+If the value comment is on the left of `console.log(value)` expression,
+then it will be updated with the `value`.
+
+```js
+// index.js
+console.log(2 + 40) //> ?
+```
+
+```sh
+$ comment-value index.js
+42
+```
+
+```js
+// index.js
+console.log(2 + 40) //> 42
+```
+
 ## Debug
 
 To see verbose messages while this module runs, set the environment
