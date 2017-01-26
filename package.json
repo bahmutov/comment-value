@@ -14,6 +14,7 @@
         "npm run hook",
         "npm run test-symbols",
         "npm run test-array",
+        "npm run test-chain",
         "npm run ban"
       ],
       "pre-push": [
