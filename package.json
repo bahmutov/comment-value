@@ -13,6 +13,7 @@
         "npm test",
         "npm run hook",
         "npm run test-symbols",
+        "npm run test-array",
         "npm run ban"
       ],
       "pre-push": [
@@ -81,7 +82,9 @@
     "test-nested": "node -r ./src/index.js test/nested/index.js",
     "deploy": "gh-pages -d images",
     "test-symbols": "DEBUG=comment-value node -r . test/symbols/index.js",
-    "posttest-symbols": "diff test/symbols/index.js test/symbols/expected.js"
+    "posttest-symbols": "diff test/symbols/index.js test/symbols/expected.js",
+    "test-array": "DEBUG=comment-value node -r . test/array/index.js",
+    "posttest-array": "diff test/array/index.js test/array/expected.js"
   },
   "devDependencies": {
     "ban-sensitive-files": "1.9.0",
