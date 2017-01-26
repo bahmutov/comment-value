@@ -15,6 +15,7 @@ script:
   - npm run test-symbols
   - npm run test-array
   - npm run test-chain
+  # - npm run test-compose
 after_success:
   - npm run semantic-release
 branches:
