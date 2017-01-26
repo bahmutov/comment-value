@@ -44,6 +44,11 @@ npm install -g comment-value
 Use either using `node -r comment-value index.js` or via CLI alias:
 `comment-value`, `values` or `cv` like this `values index.js`.
 
+Alias `values` is the preferred way. It allows
+
+* Watch files for changes and rerun with `-w, --watch` option
+* Print instrumented file with `-i, --instrumented` option
+
 ## Example
 
 Add a few comments that start with `//>` to `index.js`. You can put anything

@@ -11,6 +11,7 @@ const is = require('check-more-types')
 
 program
   .option('-w, --watch', 'Keep watching input files')
+  .option('-i, --instrumented', 'Print instrumented files')
   .parse(process.argv)
 
 if (!program.args.length) {
@@ -34,8 +35,13 @@ function runNode(inputFilename) {
   debug('running program %s', inputFilename)
   return new Promise((resolve, reject) => {
     const args = ['-r', modulePath, inputFilename]
+    const env = Object.assign({}, process.env)
+    if (program.instrumented) {
+      env.instrumented = 1
+    }
     const opts = {
-      stdio: 'inherit'
+      stdio: 'inherit',
+      env
     }
     const child = spawn('node', args, opts)
     child.on('error', err => {

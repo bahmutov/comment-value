@@ -7,6 +7,9 @@ const instrumentedFiles = []
 
 const isNodeModules = filename => filename.includes('node_modules')
 
+const printInstrumented = Boolean(process.env.instrumented)
+debug('print instrumented code?', printInstrumented)
+
 function instrumentLoadedFiles (source, filename) {
   if (isNodeModules(filename)) {
     return source
@@ -16,6 +19,10 @@ function instrumentLoadedFiles (source, filename) {
   const instrumented = instrumentSource(source, filename)
   if (instrumented !== source) {
     instrumentedFiles.push(filename)
+    if (printInstrumented) {
+      console.log('instrumented file', filename)
+      console.log(instrumented)
+    }
   }
 
   return instrumented
