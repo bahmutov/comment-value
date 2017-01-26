@@ -84,7 +84,9 @@
     "test-symbols": "DEBUG=comment-value node -r . test/symbols/index.js",
     "posttest-symbols": "diff test/symbols/index.js test/symbols/expected.js",
     "test-array": "DEBUG=comment-value node -r . test/array/index.js",
-    "posttest-array": "diff test/array/index.js test/array/expected.js"
+    "posttest-array": "diff test/array/index.js test/array/expected.js",
+    "test-chain": "DEBUG=comment-value node -r . test/lodash-chain/index.js",
+    "posttest-chain": "diff test/lodash-chain/index.js test/lodash-chain/expected.js"
   },
   "devDependencies": {
     "ban-sensitive-files": "1.9.0",
