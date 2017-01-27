@@ -79,7 +79,7 @@
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "test": "DEBUG=comment-value instrumented=1 npm run instrument && npm start && cat results.json && npm run update",
     "posttest": "npm run unit",
-    "instrument": "node src/instrument.js test/example.js",
+    "instrument": "instrumented=1 node src/instrument.js test/example.js",
     "update": "node src/update.js test/example.js",
     "start": "node instrumented.js",
     "hook": "node -r ./src/index.js test/example.js",

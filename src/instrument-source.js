@@ -38,7 +38,7 @@ function instrumentSource (source, filename) {
   function isWhiteSpaceBefore (from, comment) {
     const region = source.substr(from, comment.start - from)
     // console.log(`region "${region}" from ${from} comment starts ${comment.start}`)
-    const maybe = /\s+/.test(region)
+    const maybe = /^\s+$/.test(region)
     // console.log(`region "${region}" test ${maybe}`)
     return maybe
   }
@@ -89,11 +89,21 @@ function instrumentSource (source, filename) {
           // console.log(node)
           const value = node.source()
           debug(`instrumenting ${node.type} value ${value}`)
-          debug('parent node type', node.parent.type)
+          debug('parent node type %s source %s',
+            node.parent.type, node.parent.source())
+          // debug('grandparent node type %s source %s',
+          //   node.parent.parent.type, node.parent.parent.source())
+
           const storeAndReturn = node.parent.type === 'CallExpression'
             ? storeInIIFE(reference, value)
             : storeInBlock(reference, value)
-          node.update(storeAndReturn)
+
+          if (node.parent.parent &&
+            node.parent.parent.type === 'ExpressionStatement') {
+            node.update(';' + storeAndReturn)
+          } else {
+            node.update(storeAndReturn)
+          }
         }
       }
     }
