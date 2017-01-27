@@ -95,9 +95,17 @@ function instrumentSource (source, filename) {
           // debug('grandparent node type %s source %s',
           //   node.parent.parent.type, node.parent.parent.source())
 
-          const storeAndReturn = node.parent.type === 'CallExpression'
-            ? storeInIIFE(reference, value)
-            : storeInBlock(reference, value)
+          let storeAndReturn
+          if (node.parent.type === 'CallExpression') {
+            storeAndReturn = storeInIIFE(reference, value)
+          } else if (node.parent.type === 'MemberExpression') {
+            // update the entire parent node
+            let parentStore = storeInIIFE(reference, node.parent.source())
+            node.parent.update(parentStore)
+            return
+          } else {
+            storeAndReturn = storeInBlock(reference, value)
+          }
 
           if (node.parent.parent &&
             node.parent.parent.type === 'ExpressionStatement') {

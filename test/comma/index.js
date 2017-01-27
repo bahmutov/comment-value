@@ -4,4 +4,4 @@ const f = pipe(
   negate, //> -81
   inc     //> -80
 )
-console.log(f(3, 4))
+console.log(f(3, 4)) //> -80
