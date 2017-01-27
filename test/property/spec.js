@@ -5,6 +5,7 @@ const read = require('fs').readFileSync
 const inFolder = require('path').join.bind(null, __dirname)
 const R = require('ramda')
 
+/* global describe, beforeEach, it */
 describe('property functions', () => {
   const source = read(inFolder('index.js'), 'utf8')
   let emitter
@@ -14,7 +15,6 @@ describe('property functions', () => {
   })
 
   it('instruments', () => {
-    const comments = []
     const output = instrument(source)
     la(is.unemptyString(output), 'did not get output')
   })
@@ -23,7 +23,7 @@ describe('property functions', () => {
     const comments = []
     emitter.on('comment', comments.push.bind(comments))
     instrument(source)
-    la(R.equals(['> 81'], R.map(R.prop('text'), comments)), comments)
+    la(R.equals([' > 81'], R.map(R.prop('text'), comments)), comments)
   })
 
   it('wraps the property expression', () => {

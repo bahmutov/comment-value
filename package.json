@@ -73,7 +73,7 @@
     "deps": "deps-ok",
     "issues": "git-issues",
     "license": "license-checker --production --onlyunknown --csv",
-    "lint": "standard --verbose --fix src/*.js",
+    "lint": "standard --verbose --fix src/*.js test/property/*.js",
     "pretest": "npm run lint",
     "secure": "nsp check",
     "size": "t=\"$(npm pack .)\"; wc -c \"${t}\"; tar tvf \"${t}\"; rm \"${t}\";",

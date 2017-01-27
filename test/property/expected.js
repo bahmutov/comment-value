@@ -1,6 +1,6 @@
 const {pipe, negate, inc} = require('ramda')
 const f = pipe(
-  Math.pow, //> 81
+  Math.pow, // > 81
   negate,
   inc
 )
