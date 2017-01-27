@@ -66,6 +66,13 @@ function instrumentSource (source, filename) {
   }
 
   const isConsoleLog = node =>
+    node &&
+      node.type === 'CallExpression' &&
+      node.callee.type === 'MemberExpression' &&
+      node.callee.object.name === 'console' &&
+      node.callee.property.name === 'log'
+
+  const isConsoleLogExpression = node =>
     node.expression &&
       node.expression.type === 'CallExpression' &&
       node.expression.callee.type === 'MemberExpression' &&
@@ -73,11 +80,19 @@ function instrumentSource (source, filename) {
       node.expression.callee.property.name === 'log'
 
   function instrument (node) {
-    // TODO can also handle individual value
+    // console.log(node.type, node.end, node.source())
+    // TODO can we handle individual value?
     if (node.type === 'ExpressionStatement' ||
-      node.type === 'Identifier') {
-      // console.log(node.type, node.end, node.source())
-      // console.log(node.source(), node)
+      node.type === 'Identifier' ||
+      node.type === 'CallExpression') {
+      if (node.type === 'CallExpression') {
+        // console.log(node.source(), node)
+        // ignore top level "console.log(...)",
+        // we only care about the arguments
+        if (isConsoleLog(node)) {
+          return
+        }
+      }
 
       if (endsBeforeInstrumentedComment(node) && hasNotSeen(node)) {
         // console.log('need to instrument', node.type, node.source())
@@ -85,7 +100,7 @@ function instrumentSource (source, filename) {
         debug('will instrument "%s" for comment "%s"', node.source(), comment.text)
         comment.instrumented = true
         const reference = 'global.__instrumenter.comments[' + comment.index + '].value'
-        if (isConsoleLog(node)) {
+        if (isConsoleLogExpression(node)) {
           debug('instrumenting console.log', node.source())
           // instrument inside the console.log (the first argument)
           const value = node.expression.arguments[0].source()
@@ -143,7 +158,6 @@ function instrumentSource (source, filename) {
       if (!commentStart) {
         return
       }
-      // console.log('comment', arguments)
       const index = __instrumenter.comments.length
       const comment = {
         value: undefined,

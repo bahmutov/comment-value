@@ -80,6 +80,20 @@ add(2, -3) //> -1
 
 You can start comments to be updated with `//>` or `//=>`.
 
+## Composed functions
+
+You can even get results from composed functions, for example, the values
+below were all computed automatically
+
+```js
+var R = require('ramda')
+R.compose(
+  Math.abs,     //=> 7
+  R.add(1),     //=> -7
+  R.multiply(2) //=> -8
+)(-4) //=> 7
+```
+
 ## Console log statements
 
 If the value comment is on the left of `console.log(value)` expression,

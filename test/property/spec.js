@@ -5,7 +5,7 @@ const read = require('fs').readFileSync
 const inFolder = require('path').join.bind(null, __dirname)
 const R = require('ramda')
 
-describe('compose with curried functions', () => {
+describe('property functions', () => {
   const source = read(inFolder('index.js'), 'utf8')
   let emitter
 

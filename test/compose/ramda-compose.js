@@ -9,6 +9,6 @@ yellGreeting('James', 'Bond'); //=> "THE NAME'S BOND, JAMES BOND"
 
 R.compose(
   Math.abs,     //=> 7
-  R.add(1),     //=> undefined
-  R.multiply(2) //> undefined
+  R.add(1),     //=> -7
+  R.multiply(2) //=> -8
 )(-4) //=> 7
