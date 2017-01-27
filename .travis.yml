@@ -11,6 +11,7 @@ before_script:
 script:
   - npm test
   - npm test
+  - npm run test-comma
   - npm run hook
   - npm run test-console
   - npm run test-nested

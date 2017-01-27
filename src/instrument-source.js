@@ -3,6 +3,7 @@ const is = require('check-more-types')
 const falafel = require('falafel')
 const debug = require('debug')('comment-value')
 const commentStarts = require('./comments').starts
+const {isWhiteSpace} = require('./comments')
 const R = require('ramda')
 const beautifySource = require('./beautify')
 
@@ -38,7 +39,7 @@ function instrumentSource (source, filename) {
   function isWhiteSpaceBefore (from, comment) {
     const region = source.substr(from, comment.start - from)
     // console.log(`region "${region}" from ${from} comment starts ${comment.start}`)
-    const maybe = /^\s+$/.test(region)
+    const maybe = isWhiteSpace(region)
     // console.log(`region "${region}" test ${maybe}`)
     return maybe
   }

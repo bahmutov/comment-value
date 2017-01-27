@@ -18,6 +18,7 @@
         "npm run test-array",
         "npm run test-chain",
         "npm run test-compose",
+        "npm run test-comma",
         "npm run ban"
       ],
       "pre-push": [
@@ -95,7 +96,9 @@
     "posttest-compose": "diff test/compose/index.js test/compose/expected.js",
     "test-console": "DEBUG=comment-value instrumented=1 node -r . test/console-log/index.js",
     "posttest-console": "diff test/console-log/index.js test/console-log/expected.js",
-    "e2e": ".git/hooks/pre-commit"
+    "e2e": ".git/hooks/pre-commit",
+    "test-comma": "DEBUG=comment-value instrumented=1 node -r . test/comma/index.js",
+    "posttest-comma": "diff test/comma/index.js test/comma/expected.js"
   },
   "devDependencies": {
     "ban-sensitive-files": "1.9.0",
