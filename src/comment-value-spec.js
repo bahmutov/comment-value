@@ -1,7 +1,15 @@
 'use strict'
 
+const la = require('lazy-ass')
+
 /* global describe, it */
-describe('empty test suite', () => {
-  it('write this test', () => {
+describe('comment-value', () => {
+  const r = /\s+/
+  it('matches 1 space', () => {
+    la(r.test(' '))
+  })
+
+  it('matches 2 spaces', () => {
+    la(r.test('  '))
   })
 })

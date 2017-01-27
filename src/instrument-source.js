@@ -27,16 +27,32 @@ function storeInBlock (reference, value) {
 }
 
 function instrumentSource (source, filename) {
+  la(is.string(source), 'missing source', source)
+
   // TODO handle multiple files by making this object global
   // and avoiding overwriting it
   const __instrumenter = global.__instrumenter || {
     comments: []
   }
 
-  const endsBeforeInstrumentedComment = node =>
-    __instrumenter.comments.some(c => c.start === node.end + 1)
-  const findComment = node =>
-    __instrumenter.comments.find(c => c.start === node.end + 1)
+  function isWhiteSpaceBefore (from, comment) {
+    const region = source.substr(from, comment.start - from)
+    // console.log(`region "${region}" from ${from} comment starts ${comment.start}`)
+    const maybe = /\s+/.test(region)
+    // console.log(`region "${region}" test ${maybe}`)
+    return maybe
+  }
+
+  const findComment = node => {
+    // console.log('looking for comment for node',
+      // node.source(), node.end, 'line', node.loc.end.line)
+    return __instrumenter.comments
+      .filter(c => c.from.line === node.loc.end.line)
+      .find(c => isWhiteSpaceBefore(node.end, c))
+  }
+
+  const endsBeforeInstrumentedComment = R.compose(Boolean, findComment)
+
   const hasNotSeen = node => {
     const c = findComment(node)
     return !c.instrumented
@@ -54,10 +70,12 @@ function instrumentSource (source, filename) {
     if (node.type === 'ExpressionStatement' ||
       node.type === 'Identifier') {
       // console.log(node.type, node.end, node.source())
+      // console.log(node.source(), node)
 
       if (endsBeforeInstrumentedComment(node) && hasNotSeen(node)) {
         // console.log('need to instrument', node.type, node.source())
         const comment = findComment(node)
+        debug('will instrument "%s" for comment "%s"', node.source(), comment.text)
         comment.instrumented = true
         const reference = 'global.__instrumenter.comments[' + comment.index + '].value'
         if (isConsoleLog(node)) {
