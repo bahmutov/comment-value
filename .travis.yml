@@ -10,8 +10,14 @@ before_script:
   - npm prune
 script:
   - npm test
-  - npm run e2e
-  # - npm run test-compose
+  - npm test
+  - npm run hook
+  - npm run test-console
+  - npm run test-nested
+  - npm run test-symbols
+  - npm run test-array
+  - npm run test-chain
+  - npm run test-compose
 after_success:
   - npm run semantic-release
 branches:
