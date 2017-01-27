@@ -1,13 +1,11 @@
-var _ = require('lodash')
-var users = [
-  { 'user': 'barney',  'age': 36 },
-  { 'user': 'fred',    'age': 40 },
-  { 'user': 'pebbles', 'age': 1 }
-];
+function wrap (fn) {
+  console.log('running function', fn.name)
+  return fn()
+}
 
-var youngest = _
-  .chain(users)
-  .sortBy('age')
-  .head()
-  .value()
-console.log(youngest) //> {"user":"pebbles","age":1}
+const foo = () => 'foo'
+
+const result = wrap(
+  foo //> "foo"
+)
+console.assert(result === 'foo', result)

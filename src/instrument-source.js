@@ -8,11 +8,22 @@ const beautify = require('./beautify')
 
 la(is.strings(commentStarts), 'invalid comment starts', commentStarts)
 
-function storeInIIFE (store, reference) { // eslint-disable-line no-unused-vars
-  return `(function () { ${store}; return ${reference} }())`
+function storeInIIFE (reference, value) {
+  return `(function () {
+    if (typeof ${value} === 'function') {
+      return function () {
+        ${reference} = ${value}.apply(null, arguments)
+        return ${reference}
+      }
+    } else {
+      ${reference} = ${value};
+      return ${reference}
+    }
+  }())`
 }
-function storeInBlock (store, reference) {
-  return `{ ${store} && ${reference} }`
+function storeInBlock (reference, value) {
+  const store = reference + ' = ' + value
+  return `{ ${store}; ${reference} }`
 }
 
 function instrumentSource (source, filename) {
@@ -26,6 +37,10 @@ function instrumentSource (source, filename) {
     __instrumenter.comments.some(c => c.start === node.end + 1)
   const findComment = node =>
     __instrumenter.comments.find(c => c.start === node.end + 1)
+  const hasNotSeen = node => {
+    const c = findComment(node)
+    return !c.instrumented
+  }
 
   const isConsoleLog = node =>
     node.expression &&
@@ -40,9 +55,10 @@ function instrumentSource (source, filename) {
       node.type === 'Identifier') {
       // console.log(node.type, node.end, node.source())
 
-      if (endsBeforeInstrumentedComment(node)) {
+      if (endsBeforeInstrumentedComment(node) && hasNotSeen(node)) {
         // console.log('need to instrument', node.type, node.source())
         const comment = findComment(node)
+        comment.instrumented = true
         const reference = 'global.__instrumenter.comments[' + comment.index + '].value'
         if (isConsoleLog(node)) {
           debug('instrumenting console.log', node.source())
@@ -52,10 +68,13 @@ function instrumentSource (source, filename) {
           const printStored = 'console.log(' + storeAndReturn + ')'
           node.update(printStored)
         } else {
-          // console.log(comment)
+          // console.log(node)
           const value = node.source()
-          const store = reference + ' = ' + value
-          const storeAndReturn = storeInBlock(store, value)
+          debug(`instrumenting ${node.type} value ${value}`)
+          debug('parent node type', node.parent.type)
+          const storeAndReturn = node.parent.type === 'CallExpression'
+            ? storeInIIFE(reference, value)
+            : storeInBlock(reference, value)
           node.update(storeAndReturn)
         }
       }

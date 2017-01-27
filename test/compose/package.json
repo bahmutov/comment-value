@@ -5,13 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "../../bin/comment-value.js -i index.js",
-    "instrument": "node ../../src/instrument.js index.js",
+    "instrument": "DEBUG=comment-value node ../../src/instrument.js index.js",
     "postinstrument": "node instrumented.js"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "lodash": "4.17.4"
-  }
+  "license": "ISC"
 }

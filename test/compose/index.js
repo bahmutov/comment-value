@@ -6,6 +6,6 @@ function wrap (fn) {
 const foo = () => 'foo'
 
 const result = wrap(
-  foo //> undefined
+  foo //> "foo"
 )
 console.assert(result === 'foo', result)

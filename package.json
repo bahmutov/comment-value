@@ -15,6 +15,7 @@
         "npm run test-symbols",
         "npm run test-array",
         "npm run test-chain",
+        "npm run test-compose",
         "npm run ban"
       ],
       "pre-push": [
@@ -84,11 +85,11 @@
     "deploy": "gh-pages -d images",
     "test-symbols": "DEBUG=comment-value node -r . test/symbols/index.js",
     "posttest-symbols": "diff test/symbols/index.js test/symbols/expected.js",
-    "test-array": "DEBUG=comment-value node -r . test/array/index.js",
+    "test-array": "DEBUG=comment-value instrumented=1 node -r . test/array/index.js",
     "posttest-array": "diff test/array/index.js test/array/expected.js",
     "test-chain": "DEBUG=comment-value node -r . test/lodash-chain/index.js",
     "posttest-chain": "diff test/lodash-chain/index.js test/lodash-chain/expected.js",
-    "test-compose": "DEBUG=comment-value node -r . test/compose/index.js",
+    "test-compose": "DEBUG=comment-value instrumented=1 node -r . test/compose/index.js",
     "posttest-compose": "diff test/compose/index.js test/compose/expected.js",
     "e2e": ".git/hooks/pre-commit"
   },
