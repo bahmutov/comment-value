@@ -4,7 +4,7 @@ const falafel = require('falafel')
 const debug = require('debug')('comment-value')
 const commentStarts = require('./comments').starts
 const R = require('ramda')
-const beautify = require('./beautify')
+const beautifySource = require('./beautify')
 
 la(is.strings(commentStarts), 'invalid comment starts', commentStarts)
 
@@ -23,7 +23,7 @@ function storeInIIFE (reference, value) {
 }
 function storeInBlock (reference, value) {
   const store = reference + ' = ' + value
-  return `{ ${store}; ${reference} }`
+  return `;{ ${store}; ${reference} }`
 }
 
 function instrumentSource (source, filename) {
@@ -118,7 +118,8 @@ function instrumentSource (source, filename) {
 
   const sep = ';\n'
   const instrumented = preamble + sep + output
-  const beautified = beautify(instrumented)
+  const beautify = true
+  const beautified = beautify ? beautifySource(instrumented) : instrumented
   return beautified
 }
 
