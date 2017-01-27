@@ -6,7 +6,7 @@ const inFolder = require('path').join.bind(null, __dirname)
 const R = require('ramda')
 
 describe('compose with curried functions', () => {
-  const source = read(inFolder('curried-compose.js'), 'utf8')
+  const source = read(inFolder('index.js'), 'utf8')
   let emitter
 
   beforeEach(() => {
@@ -23,13 +23,13 @@ describe('compose with curried functions', () => {
     const comments = []
     emitter.on('comment', comments.push.bind(comments))
     instrument(source)
-    la(R.equals(['> ??'], R.map(R.prop('text'), comments)), comments)
+    la(R.equals(['> 81'], R.map(R.prop('text'), comments)), comments)
   })
 
-  it.skip('wraps the entire expression', () => {
+  it('wraps the property expression', () => {
     const wrapped = []
     emitter.on('wrap', wrapped.push.bind(wrapped))
     instrument(source)
-    la(R.equals(['R.multiply(2)'], wrapped), wrapped)
+    la(R.equals(['Math.pow'], wrapped), wrapped)
   })
 })

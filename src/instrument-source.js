@@ -3,11 +3,17 @@ const is = require('check-more-types')
 const falafel = require('falafel')
 const debug = require('debug')('comment-value')
 const commentStarts = require('./comments').starts
+la(is.strings(commentStarts), 'invalid comment starts', commentStarts)
 const {isWhiteSpace} = require('./comments')
 const R = require('ramda')
 const beautifySource = require('./beautify')
-
-la(is.strings(commentStarts), 'invalid comment starts', commentStarts)
+// emit events when finding comment / instrumenting
+// allows quick testing
+if (!global.instrument) {
+  const EventEmitter = require('events')
+  global.instrument = new EventEmitter()
+}
+const emitter = global.instrument
 
 function storeInIIFE (reference, value) {
   return `(function () {
@@ -82,7 +88,9 @@ function instrumentSource (source, filename) {
         if (isConsoleLog(node)) {
           debug('instrumenting console.log', node.source())
           // instrument inside the console.log (the first argument)
-          const store = reference + ' = ' + node.expression.arguments[0].source()
+          const value = node.expression.arguments[0].source()
+          emitter.emit('wrap', value)
+          const store = reference + ' = ' + value
           const storeAndReturn = '(function () {' + store + '; return ' + reference + '}())'
           const printStored = 'console.log(' + storeAndReturn + ')'
           node.update(printStored)
@@ -98,12 +106,16 @@ function instrumentSource (source, filename) {
           let storeAndReturn
           if (node.parent.type === 'CallExpression') {
             storeAndReturn = storeInIIFE(reference, value)
+            emitter.emit('wrap', value)
           } else if (node.parent.type === 'MemberExpression') {
             // update the entire parent node
-            let parentStore = storeInIIFE(reference, node.parent.source())
+            const value = node.parent.source()
+            emitter.emit('wrap', value)
+            let parentStore = storeInIIFE(reference, value)
             node.parent.update(parentStore)
             return
           } else {
+            emitter.emit('wrap', value)
             storeAndReturn = storeInBlock(reference, value)
           }
 
@@ -133,7 +145,7 @@ function instrumentSource (source, filename) {
       }
       // console.log('comment', arguments)
       const index = __instrumenter.comments.length
-      __instrumenter.comments.push({
+      const comment = {
         value: undefined,
         start,
         text,
@@ -142,7 +154,9 @@ function instrumentSource (source, filename) {
         to,
         filename,
         commentStart
-      })
+      }
+      __instrumenter.comments.push(comment)
+      emitter.emit('comment', comment)
     }
   }
   const output = falafel(source, parserOptions, instrument)
