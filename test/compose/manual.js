@@ -12,9 +12,14 @@ const foo = () => 'foo'
 
 const result = wrap(
   (function () {
-    const result = foo.apply(null, arguments)
-    values.foo = result
-    return result
+    if (typeof foo === 'function') {
+      const result = foo.apply(null, arguments)
+      values.foo = result
+      return result
+    } else {
+      values.foo = foo
+      return foo
+    }
   })
 )
 console.assert(result === 'foo', result)

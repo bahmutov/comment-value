@@ -4,8 +4,16 @@ const falafel = require('falafel')
 const debug = require('debug')('comment-value')
 const commentStarts = require('./comments').starts
 const R = require('ramda')
+const beautify = require('js-beautify').js_beautify
 
 la(is.strings(commentStarts), 'invalid comment starts', commentStarts)
+
+function storeInIIFE (store, reference) { // eslint-disable-line no-unused-vars
+  return `(function () { ${store}; return ${reference} }())`
+}
+function storeInBlock (store, reference) {
+  return `{ ${store} && ${reference} }`
+}
 
 function instrumentSource (source, filename) {
   // TODO handle multiple files by making this object global
@@ -45,8 +53,9 @@ function instrumentSource (source, filename) {
           node.update(printStored)
         } else {
           // console.log(comment)
-          const store = reference + ' = ' + node.source()
-          const storeAndReturn = ';(function () {' + store + '; return ' + reference + '}())'
+          const value = node.source()
+          const store = reference + ' = ' + value
+          const storeAndReturn = storeInBlock(store, value)
           node.update(storeAndReturn)
         }
       }
@@ -90,7 +99,8 @@ function instrumentSource (source, filename) {
 
   const sep = ';\n'
   const instrumented = preamble + sep + output
-  return instrumented
+  const beautified = beautify(instrumented, {indent_size: 2})
+  return beautified
 }
 
 module.exports = instrumentSource

@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "../../bin/comment-value.js -i index.js",
+    "instrument": "node ../../src/instrument.js index.js",
+    "postinstrument": "node instrumented.js"
   },
   "keywords": [],
   "author": "",

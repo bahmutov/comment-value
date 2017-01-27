@@ -113,6 +113,7 @@
     "debug": "2.6.0",
     "falafel": "2.0.0",
     "first-existing": "1.2.0",
+    "js-beautify": "1.6.4",
     "lazy-ass": "1.5.0",
     "node-hook": "0.4.0",
     "ramda": "0.23.0"
