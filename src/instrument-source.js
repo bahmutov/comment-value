@@ -4,7 +4,7 @@ const falafel = require('falafel')
 const debug = require('debug')('comment-value')
 const commentStarts = require('./comments').starts
 const R = require('ramda')
-const beautify = require('js-beautify').js_beautify
+const beautify = require('./beautify')
 
 la(is.strings(commentStarts), 'invalid comment starts', commentStarts)
 
@@ -99,7 +99,7 @@ function instrumentSource (source, filename) {
 
   const sep = ';\n'
   const instrumented = preamble + sep + output
-  const beautified = beautify(instrumented, {indent_size: 2})
+  const beautified = beautify(instrumented)
   return beautified
 }
 

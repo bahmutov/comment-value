@@ -1,6 +1,7 @@
 const instrumentSource = require('./instrument-source')
 const fs = require('fs')
 const debug = require('debug')('comment-value')
+const beautify = require('./beautify')
 
 function instrumentFile (filename, outputFilename) {
   debug('instrumenting file %s', filename)
@@ -8,16 +9,16 @@ function instrumentFile (filename, outputFilename) {
   const instrumented = instrumentSource(source, filename)
   // TODO move outside
   function saveResults () {
-    /* global __instrumenter */
     const fs = require('fs')
     process.on('exit', function writeResults () {
       fs.writeFileSync('./results.json',
-        JSON.stringify(__instrumenter, null, 2) + '\n', 'utf8')
+        JSON.stringify(global.__instrumenter, null, 2) + '\n', 'utf8')
     })
   }
   const save = '(' + saveResults.toString() + '())\n'
   const sep = ';\n'
-  fs.writeFileSync(outputFilename, instrumented + sep + save, 'utf8')
+  const output = beautify(instrumented + sep + save) + '\n'
+  fs.writeFileSync(outputFilename, output, 'utf8')
 }
 
 module.exports = instrumentFile

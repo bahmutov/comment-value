@@ -89,7 +89,8 @@
     "test-chain": "DEBUG=comment-value node -r . test/lodash-chain/index.js",
     "posttest-chain": "diff test/lodash-chain/index.js test/lodash-chain/expected.js",
     "test-compose": "DEBUG=comment-value node -r . test/compose/index.js",
-    "posttest-compose": "diff test/compose/index.js test/compose/expected.js"
+    "posttest-compose": "diff test/compose/index.js test/compose/expected.js",
+    "e2e": ".git/hooks/pre-commit"
   },
   "devDependencies": {
     "ban-sensitive-files": "1.9.0",
