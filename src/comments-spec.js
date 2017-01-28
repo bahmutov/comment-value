@@ -27,3 +27,18 @@ describe('comments white space', () => {
     la(!isWhiteSpace('( )'))
   })
 })
+
+describe('comment variable parser', () => {
+  const {findCommentVariable} = require('./comments')
+  it('finds foo', () => {
+    const s = ' foo: whatever here'
+    const variable = findCommentVariable(s)
+    la(variable === 'foo', variable, 'from', s)
+  })
+
+  it('finds fooBar', () => {
+    const s = ' fooBar: whatever here'
+    const variable = findCommentVariable(s)
+    la(variable === 'fooBar', variable, 'from', s)
+  })
+})

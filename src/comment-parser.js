@@ -1,14 +1,44 @@
 const la = require('lazy-ass')
 const is = require('check-more-types')
-const commentStarts = require('./comments').starts
-la(is.strings(commentStarts), 'invalid comment starts', commentStarts)
-const R = require('ramda')
-
-const findCommentValue = s =>
-  R.find(c => s.startsWith(c), commentStarts)
+const {findCommentValue, findCommentVariable} = require('./comments')
 
 function init (filename, comments, emitter) {
   la(is.array(comments), 'missing list for output comments')
+
+  const parseAsCommentValue = (text, start, end, from, to) => {
+    const commentStart = findCommentValue(text)
+    if (!commentStart) {
+      return
+    }
+    const comment = {
+      value: undefined,
+      start,
+      text,
+      from,
+      to,
+      filename,
+      commentStart
+    }
+    return comment
+  }
+
+  const parseAsCommentVariable = (text, start, end, from, to) => {
+    const variable = findCommentVariable(text)
+    if (!variable) {
+      return
+    }
+
+    const comment = {
+      value: undefined,
+      start,
+      text,
+      from,
+      to,
+      filename,
+      variable
+    }
+    return comment
+  }
 
   const parserOptions = {
     locations: true,
@@ -16,23 +46,15 @@ function init (filename, comments, emitter) {
       if (block) {
         return
       }
-      const commentStart = findCommentValue(text)
-      if (!commentStart) {
-        return
+      let comment = parseAsCommentValue(text, start, end, from, to)
+      if (!comment) {
+        comment = parseAsCommentVariable(text, start, end, from, to)
       }
-      const index = comments.length
-      const comment = {
-        value: undefined,
-        start,
-        text,
-        index,
-        from,
-        to,
-        filename,
-        commentStart
+      if (comment) {
+        comment.index = comments.length
+        comments.push(comment)
+        emitter.emit('comment', comment)
       }
-      comments.push(comment)
-      emitter.emit('comment', comment)
     }
   }
   return parserOptions
