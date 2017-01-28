@@ -18,6 +18,10 @@ describe('comments white space', () => {
     la(isWhiteSpace(',  '))
   })
 
+  it('passes newlines', () => {
+    la(isWhiteSpace('\n  '))
+  })
+
   it('does not match braces', () => {
     la(!isWhiteSpace('()'))
     la(!isWhiteSpace('( )'))

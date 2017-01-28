@@ -50,11 +50,15 @@ function instrumentSource (source, filename) {
     return maybe
   }
 
+  const isCloseComment = R.curry((line, c) => {
+    return c.from.line === line || c.from.line === line + 1
+  })
+
   const findComment = node => {
     // console.log('looking for comment for node',
       // node.source(), node.end, 'line', node.loc.end.line)
     return __instrumenter.comments
-      .filter(c => c.from.line === node.loc.end.line)
+      .filter(isCloseComment(node.loc.end.line))
       .find(c => isWhiteSpaceBefore(node.end, c))
   }
 
