@@ -4,7 +4,7 @@ const falafel = require('falafel')
 const debug = require('debug')('comment-value')
 const commentStarts = require('./comments').starts
 la(is.strings(commentStarts), 'invalid comment starts', commentStarts)
-const initCommentParser = require('./comment-parser')
+const {parseCommentVariables, initExpressionParser} = require('./comment-parser')
 
 const {isWhiteSpace} = require('./comments')
 const R = require('ramda')
@@ -41,7 +41,8 @@ function instrumentSource (source, filename) {
   // TODO handle multiple files by making this object global
   // and avoiding overwriting it
   const __instrumenter = global.__instrumenter || {
-    comments: []
+    comments: [],
+    variables: []
   }
 
   function isWhiteSpaceBefore (from, comment) {
@@ -59,6 +60,13 @@ function instrumentSource (source, filename) {
   const findComment = node => {
     // console.log('looking for comment for node',
       // node.source(), node.end, 'line', node.loc.end.line)
+    la(node, 'missing node', node)
+    // console.log(node)
+    if (!node.loc) {
+      // console.log('node is missing loc')
+      return
+    }
+    la(node.loc, 'missing node location', node)
     return __instrumenter.comments
       .filter(isCloseComment(node.loc.end.line))
       .find(c => isWhiteSpaceBefore(node.end, c))
@@ -101,7 +109,7 @@ function instrumentSource (source, filename) {
       }
 
       if (endsBeforeInstrumentedComment(node) && hasNotSeen(node)) {
-        // console.log('need to instrument', node.type, node.source())
+        debug('need to instrument', node.type, node.source())
         const comment = findComment(node)
         debug('will instrument "%s" for comment "%s"', node.source(), comment.text)
         comment.instrumented = true
@@ -151,18 +159,34 @@ function instrumentSource (source, filename) {
     }
   }
 
-  const parserOptions = initCommentParser(
+  // first pass - find and instrument just the variables in the
+  // comments
+  const output1 = parseCommentVariables(source, filename,
+    __instrumenter.variables, emitter)
+  // const variableParser = initVariableParser(
+  //   filename, __instrumenter.comments, emitter)
+  // const output1 = falafel(source, variableParser, R.identity)
+  debug('instrumented for %d variables',
+    __instrumenter.variables.length)
+  __instrumenter.variables.forEach(c =>
+    debug('line %d variable %s', c.lineIndex, c.variable))
+
+  // second pass - instrument all implicit expressions
+  debug('second pass - finding expressions to instrument')
+  const expressionParser = initExpressionParser(
     filename, __instrumenter.comments, emitter)
-  const output = falafel(source, parserOptions, instrument)
-  debug('instrumented for %d comments', __instrumenter.comments.length)
+  const output2 = falafel(output1, expressionParser, instrument)
+  debug('instrumented for total %d expressions in comments',
+    __instrumenter.comments.length)
+  __instrumenter.comments.forEach(c =>
+    debug('line %d expression %s', c.from.line, c.text))
+
   // console.log(__instrumenter.comments)
   const preamble = 'if (!global.__instrumenter) {global.__instrumenter=' +
     JSON.stringify(__instrumenter, null, 2) + '}\n'
-  // console.log(preamble)
-  // console.log('output source\n' + output)
 
   const sep = ';\n'
-  const instrumented = preamble + sep + output
+  const instrumented = preamble + sep + output2
   const beautify = true
   const beautified = beautify ? beautifySource(instrumented) : instrumented
   return beautified

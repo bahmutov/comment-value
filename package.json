@@ -11,6 +11,7 @@
         "npm prune",
         "npm run deps",
         "npm test",
+        "echo TODO: npm run test-variable",
         "npm run hook",
         "npm run test-console",
         "npm run test-nested",
@@ -101,7 +102,9 @@
     "test-comma": "DEBUG=comment-value instrumented=1 node -r . test/comma/index.js",
     "posttest-comma": "diff test/comma/index.js test/comma/expected.js",
     "test-property": "DEBUG=comment-value instrumented=1 node -r . test/property/index.js",
-    "posttest-property": "diff test/property/index.js test/property/expected.js"
+    "posttest-property": "diff test/property/index.js test/property/expected.js",
+    "test-variable": "DEBUG=comment-value instrumented=1 node -r . test/variable/index.js",
+    "posttest-variable": "diff test/variable/index.js test/variable/expected.js"
   },
   "devDependencies": {
     "ban-sensitive-files": "1.9.0",

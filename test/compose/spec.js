@@ -26,7 +26,7 @@ describe('compose with curried functions', () => {
     la(R.equals(['> ??'], R.map(R.prop('text'), comments)), comments)
   })
 
-  it('wraps the entire expression', () => {
+  it('wraps the entire curried expression', () => {
     const wrapped = []
     emitter.on('wrap', wrapped.push.bind(wrapped))
     instrument(source)

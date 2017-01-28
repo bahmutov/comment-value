@@ -5,7 +5,7 @@ const read = require('fs').readFileSync
 const inFolder = require('path').join.bind(null, __dirname)
 const R = require('ramda')
 
-describe.skip('variable value', () => {
+describe('variable value', () => {
   const source = read(inFolder('index.js'), 'utf8')
   let emitter
 
@@ -14,10 +14,10 @@ describe.skip('variable value', () => {
   })
 
   it('finds the variable comment', () => {
-    const comments = []
-    emitter.on('comment', c => comments.push(c))
+    const variables = []
+    emitter.on('comment', c => variables.push(c.variable))
     instrument(source)
-    la(R.equals(['foo:'], comments), comments)
+    la(R.equals(['foo'], variables), variables)
   })
 
   it.skip('wraps the first argument only', () => {

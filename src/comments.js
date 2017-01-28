@@ -1,4 +1,6 @@
 const R = require('ramda')
+const la = require('lazy-ass')
+const is = require('check-more-types')
 
 // look for comments that start with these symbols
 const comments = ['//>', '//=>', '// >', '// >>', '// =>', '//~>', '// ~>']
@@ -19,9 +21,27 @@ function findCommentValue (s) {
 // tries to find the variable name (if any) used in special
 // comment, for example " fooBar: anything here" returns match "fooBar"
 function findCommentVariable (s) {
-  const r = /^ (\w+): /
+  const r = /^ (\w+):/
   const matches = r.exec(s)
   return matches && matches[1]
+}
+
+function isLineComment (line) {
+  const r = /^\s*\/\//
+  return r.test(line)
+}
+
+function parseLineComment (line) {
+  la(isLineComment(line), 'not a line comment', line)
+  const commentStarts = line.indexOf('//')
+  la(is.found(commentStarts), 'could not find //', line)
+  const comment = line.substr(commentStarts + 2)
+
+  return {
+    line,
+    commentStarts,
+    comment
+  }
 }
 
 module.exports = {
@@ -29,5 +49,7 @@ module.exports = {
   starts,
   isWhiteSpace,
   findCommentValue,
-  findCommentVariable
+  findCommentVariable,
+  isLineComment,
+  parseLineComment
 }
