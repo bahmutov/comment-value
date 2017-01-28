@@ -23,10 +23,6 @@ function updateFile (filename, results) {
     .forEach(updateComment)
 
   function updateComment (c) {
-    if (c.variable) {
-      // TODO update comment variables
-      return
-    }
     const commentStart = c.commentStart
     la(is.unemptyString(commentStart), 'missing comment start', c)
     // console.log('updating comment')

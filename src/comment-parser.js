@@ -40,8 +40,8 @@ function initVariableParser (filename, comments, emitter) {
   return parserOptions
 }
 
-function parseCommentVariables (source, filename, comments, emitter) {
-  const lines = source.split('\n')
+function findVariables (lines) {
+  const output = []
   lines.forEach((line, lineIndex) => {
     if (!isLineComment(line)) {
       return
@@ -58,15 +58,25 @@ function parseCommentVariables (source, filename, comments, emitter) {
       value: undefined,
       line,
       lineIndex,
-      filename,
       variable
     }
-    if (comment) {
-      comment.index = comments.length
-      comments.push(comment)
-      emitter.emit('comment', comment)
-    }
+    output.push(comment)
   })
+  return output
+}
+
+function parseCommentVariables (source, filename, list, emitter) {
+  la(is.array(list), 'missing output list for variables')
+
+  const lines = source.split('\n')
+  const output = findVariables(lines)
+  output.forEach((c, k) => {
+    c.filename = filename
+    c.index = list.length + k
+    list.push(c)
+    emitter.emit('comment', c)
+  })
+
   return source
 }
 
