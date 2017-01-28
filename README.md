@@ -59,6 +59,9 @@ after that into the comment.
 const add = (a, b) => a + b
 add(2, 3) //>
 add(2, -3) //> ? anything here
+// you can also print variables!
+const t = typeof add
+// t:
 ```
 
 Run the `comment-value` script which runs your Node
@@ -74,12 +77,36 @@ The `index.js` will now contain
 const add = (a, b) => a + b
 add(2, 3) //> 5
 add(2, -3) //> -1
+// you can also print variables!
+const t = typeof add
+// t: "function"
 ```
 
 ## Comment format
 
 You can start special value comments to be updated with strings
 `//>`, `//=>`, `//~>`, `// >`, `// =>` and even `// ~>`.
+
+For variables, use line comment with just variable name followed by `:`,
+for example
+
+```js
+function add(a, b) {
+  // a:
+  // b:
+}
+add(10, 2)
+```
+
+which will produce
+
+```js
+function add(a, b) {
+  // a: 10
+  // b: 2
+}
+add(10, 2)
+```
 
 ## Composed functions
 
