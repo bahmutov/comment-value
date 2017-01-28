@@ -163,9 +163,6 @@ function instrumentSource (source, filename) {
   // comments
   const output1 = parseCommentVariables(source, filename,
     __instrumenter.variables, emitter)
-  // const variableParser = initVariableParser(
-  //   filename, __instrumenter.comments, emitter)
-  // const output1 = falafel(source, variableParser, R.identity)
   debug('instrumented for %d variables',
     __instrumenter.variables.length)
   __instrumenter.variables.forEach(c =>

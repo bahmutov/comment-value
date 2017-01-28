@@ -3,6 +3,7 @@ const path = require('path')
 const la = require('lazy-ass')
 const is = require('check-more-types')
 const debug = require('debug')('comment-value')
+const R = require('ramda')
 
 function updateFile (filename, results) {
   debug('updating comment values in file %s', filename)
@@ -17,10 +18,40 @@ function updateFile (filename, results) {
 
   const forThisFile = comment => comment.filename === filename
 
+  // console.log('updating source from file', filename)
+  // console.log(source)
+
+  function debugPrintComment (c) {
+    debug('comment line %d value %s', c.from.line, c.value)
+  }
+
+  function debugPrintVariable (c) {
+    debug('variable line %d name %s value %s',
+      c.lineIndex, c.variable, c.value)
+  }
+
   const lines = source.split('\n')
   results.comments
     .filter(forThisFile)
+    .map(R.tap(debugPrintComment))
     .forEach(updateComment)
+
+  results.variables
+    .filter(forThisFile)
+    .map(R.tap(debugPrintVariable))
+    .forEach(updateVariableComment)
+
+  function updateVariableComment (c) {
+    const line = lines[c.lineIndex]
+    la(line, 'missing line', c.lineIndex, 'for comment', c)
+    const variableString = ` ${c.variable}:`
+    const variableIndex = line.indexOf(variableString)
+    la(is.found(variableIndex),
+      'cannot find variable comment', c, 'on line', line)
+    const start = line.substr(0, variableIndex + variableString.length)
+    const newComment = start + ' ' + JSON.stringify(c.value)
+    lines[c.lineIndex] = newComment
+  }
 
   function updateComment (c) {
     const commentStart = c.commentStart

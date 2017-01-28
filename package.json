@@ -11,7 +11,7 @@
         "npm prune",
         "npm run deps",
         "npm test",
-        "echo TODO: npm run test-variable",
+        "npm run test-variable",
         "npm run hook",
         "npm run test-console",
         "npm run test-nested",
