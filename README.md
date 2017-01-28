@@ -124,6 +124,31 @@ variable `DEBUG` before running
 DEBUG=comment-value node ...
 ```
 
+The instrumenting function has a global emitter, you can receive messages
+when special comments are found and when an expression is wrapped.
+For example this code will produce the following events
+
+```js
+// index.js
+console.log(2 + 40) //> ??
+// spec.js
+let emitter
+beforeEach(() => {
+  emitter = global.instrument
+})
+it('finds the comment', () => {
+  const comments = []
+  const wrapped = []
+  emitter.on('comment', c => comments.push(c))
+  emitter.on('wrap', w => wrapped.push(w))
+  instrument(source)
+  // comments will be ["> ??"]
+  // wrapped will be ["2 + 40"]
+})
+```
+
+This is an internal feature and is used during unit tests.
+
 ### Small print
 
 Author: Gleb Bahmutov &lt;gleb.bahmutov@gmail.com&gt; &copy; 2017
