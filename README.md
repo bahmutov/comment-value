@@ -79,7 +79,7 @@ add(2, -3) //> -1
 ## Comment format
 
 You can start special value comments to be updated with strings
-`//>`, `//=>`, '//~>', `// >`, `// =>` and even `// ~>`.
+`//>`, `//=>`, `//~>`, `// >`, `// =>` and even `// ~>`.
 
 ## Composed functions
 
