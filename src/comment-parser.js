@@ -70,9 +70,11 @@ function parseCommentVariables (source, filename, list, emitter) {
 
   const lines = source.split('\n')
   const output = findVariables(lines)
+  const initialLength = list.length
+
   output.forEach((c, k) => {
     c.filename = filename
-    c.index = list.length + k
+    c.index = initialLength + k
     list.push(c)
     emitter.emit('comment', c)
   })

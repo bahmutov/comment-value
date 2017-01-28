@@ -17,13 +17,6 @@ describe('variable value', () => {
     const variables = []
     emitter.on('comment', c => variables.push(c.variable))
     instrument(source)
-    la(R.equals(['foo'], variables), variables)
-  })
-
-  it.skip('wraps the first argument only', () => {
-    const wrapped = []
-    emitter.on('wrap', wrapped.push.bind(wrapped))
-    instrument(source)
-    la(R.equals(['2 + 40'], wrapped), wrapped)
+    la(R.equals(['foo', 'a', 'b'], variables), variables)
   })
 })
