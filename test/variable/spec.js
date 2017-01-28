@@ -13,14 +13,14 @@ describe.skip('variable value', () => {
     emitter = global.instrument
   })
 
-  it('finds the comment', () => {
+  it('finds the variable comment', () => {
     const comments = []
-    emitter.on('comment', comments.push.bind(comments))
+    emitter.on('comment', c => comments.push(c))
     instrument(source)
-    la(R.equals(['> 42'], R.map(R.prop('text'), comments)), comments)
+    la(R.equals(['foo:'], comments), comments)
   })
 
-  it('wraps the first argument only', () => {
+  it.skip('wraps the first argument only', () => {
     const wrapped = []
     emitter.on('wrap', wrapped.push.bind(wrapped))
     instrument(source)

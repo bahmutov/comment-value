@@ -4,6 +4,8 @@ const falafel = require('falafel')
 const debug = require('debug')('comment-value')
 const commentStarts = require('./comments').starts
 la(is.strings(commentStarts), 'invalid comment starts', commentStarts)
+const initCommentParser = require('./comment-parser')
+
 const {isWhiteSpace} = require('./comments')
 const R = require('ramda')
 const beautifySource = require('./beautify')
@@ -149,34 +151,8 @@ function instrumentSource (source, filename) {
     }
   }
 
-  const findCommentValue = s =>
-    R.find(c => s.startsWith(c), commentStarts)
-
-  const parserOptions = {
-    locations: true,
-    onComment (block, text, start, end, from, to) {
-      if (block) {
-        return
-      }
-      const commentStart = findCommentValue(text)
-      if (!commentStart) {
-        return
-      }
-      const index = __instrumenter.comments.length
-      const comment = {
-        value: undefined,
-        start,
-        text,
-        index,
-        from,
-        to,
-        filename,
-        commentStart
-      }
-      __instrumenter.comments.push(comment)
-      emitter.emit('comment', comment)
-    }
-  }
+  const parserOptions = initCommentParser(
+    filename, __instrumenter.comments, emitter)
   const output = falafel(source, parserOptions, instrument)
   debug('instrumented for %d comments', __instrumenter.comments.length)
   // console.log(__instrumenter.comments)
