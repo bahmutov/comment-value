@@ -77,7 +77,16 @@ function parseCommentVariables (source, filename, list, emitter) {
     emitter.emit('comment', c)
   })
 
-  return source
+  output.forEach((c, k) => {
+    la(is.number(c.lineIndex), 'missing line index', c)
+    // account for previous insertions
+    const newLineIndex = c.lineIndex + k
+    const reference = `global.__instrumenter.variables[${c.index}].value`
+    const store = `${reference} = ${c.variable}`
+    lines.splice(newLineIndex + 1, 0, store)
+  })
+
+  return lines.join('\n')
 }
 
 function initExpressionParser (filename, comments, emitter) {
