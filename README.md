@@ -13,6 +13,9 @@
 Writing and maintaining code examples is hard. Often the values shown in
 the comments (think blog posts) are out of date and incorrect.
 
+Read more about the problem and this tool solves it in blog post
+[Accurate values in comments](https://glebbahmutov.com/blog/accurate-values-in-comments/).
+
 ## What does comment-value do?
 
 `comment-value` or `values` for short executes your Node program,
