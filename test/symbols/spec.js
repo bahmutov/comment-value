@@ -17,6 +17,8 @@ describe('comment symbols', () => {
     const comments = []
     emitter.on('comment', c => comments.push(c.text))
     instrument(source)
-    la(R.equals(['=> 30', '> 9', ' => 16', ' ~> 10'], comments), comments)
+    const expected = ['=> 30', '> 9', ' => 16', ' ~> 10', '> 30']
+    const compareComments = R.equals(expected)
+    la(compareComments(comments), comments)
   })
 })

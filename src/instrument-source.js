@@ -47,6 +47,9 @@ function instrumentSource (source, filename) {
 
   function isWhiteSpaceBefore (from, comment) {
     const region = source.substr(from, comment.start - from)
+    if (is.empty(region)) {
+      return true
+    }
     // console.log(`region "${region}" from ${from} comment starts ${comment.start}`)
     const maybe = isWhiteSpace(region)
     // console.log(`region "${region}" test ${maybe}`)

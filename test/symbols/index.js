@@ -5,3 +5,5 @@
 // space between // and => symbols
 (2 * 8);    // => 16
 (11 - 1);   // ~> 10
+// no space between the expression and comment
+(10 + 20);//> 30
