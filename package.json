@@ -92,6 +92,8 @@
     "deploy": "gh-pages -d images",
     "test-symbols": "DEBUG=comment-value instrumented=1 node -r . test/symbols/index.js",
     "posttest-symbols": "diff test/symbols/index.js test/symbols/expected.js",
+    "test-types": "DEBUG=comment-value instrumented=1 node -r . test/types/index.js",
+    "posttest-types": "diff test/types/index.js test/types/expected.js",
     "test-array": "DEBUG=comment-value instrumented=1 node -r . test/array/index.js",
     "posttest-array": "diff test/array/index.js test/array/expected.js",
     "test-chain": "DEBUG=comment-value instrumented=1 node -r . test/lodash-chain/index.js",

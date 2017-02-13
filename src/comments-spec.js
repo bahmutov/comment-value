@@ -57,6 +57,15 @@ describe('line comment', () => {
   })
 })
 
+describe('comment variable type parser', () => {
+  const {findCommentVariableType} = require('./comments')
+  it('finds foo', () => {
+    const s = ' foo:: whatever here'
+    const variable = findCommentVariableType(s)
+    la(variable === 'foo', variable, 'from', s)
+  })
+})
+
 describe('comment variable parser', () => {
   const {findCommentVariable} = require('./comments')
   it('finds foo', () => {

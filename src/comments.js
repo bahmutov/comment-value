@@ -26,6 +26,14 @@ function findCommentVariable (s) {
   return matches && matches[1]
 }
 
+// finds variable names where we should output type
+// like "foo::"
+function findCommentVariableType (s) {
+  const r = /^ (\w+)::(?:\s+|\n|$)/
+  const matches = r.exec(s)
+  return matches && matches[1]
+}
+
 function isLineComment (line) {
   const r = /^\s*\/\//
   return r.test(line)
@@ -50,6 +58,7 @@ module.exports = {
   isWhiteSpace,
   findCommentValue,
   findCommentVariable,
+  findCommentVariableType,
   isLineComment,
   parseLineComment
 }

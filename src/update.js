@@ -44,7 +44,10 @@ function updateFile (filename, results) {
   function updateVariableComment (c) {
     const line = lines[c.lineIndex]
     la(line, 'missing line', c.lineIndex, 'for comment', c)
-    const variableString = ` ${c.variable}:`
+    la(is.oneOf(['value', 'type'], c.find), 'invalid variable', c.variable,
+      'find', c.find, c)
+    const variableString = c.find === 'value'
+      ? ` ${c.variable}:` : ` ${c.variable}::`
     const variableIndex = line.indexOf(variableString)
     la(is.found(variableIndex),
       'cannot find variable comment', c, 'on line', line)

@@ -1,6 +1,13 @@
 const la = require('lazy-ass')
 const is = require('check-more-types')
-const {findCommentValue, findCommentVariable, isLineComment, parseLineComment} = require('./comments')
+const comments = require('./comments')
+const {
+  findCommentValue,
+  findCommentVariable,
+  findCommentVariableType,
+  isLineComment,
+  parseLineComment
+} = comments
 
 function initVariableParser (filename, comments, emitter) {
   la(is.array(comments), 'missing list for output comments')
@@ -50,17 +57,32 @@ function findVariables (lines) {
     la(parsed, 'could not parse line comment', line)
 
     const variable = findCommentVariable(parsed.comment)
-    if (!variable) {
+    if (variable) {
+      la(is.unemptyString(variable), 'expected variable name', variable,
+        'from', parsed.comment)
+      const comment = {
+        find: 'value',
+        line,
+        lineIndex,
+        variable
+      }
+      output.push(comment)
       return
     }
 
-    const comment = {
-      value: undefined,
-      line,
-      lineIndex,
-      variable
+    const variableType = findCommentVariableType(parsed.comment)
+    if (variableType) {
+      la(is.unemptyString(variableType),
+        'expected variable name for type', variableType,
+        'from', parsed.comment)
+      const comment = {
+        find: 'type',
+        line,
+        lineIndex,
+        variable: variableType
+      }
+      output.push(comment)
     }
-    output.push(comment)
   })
   return output
 }
@@ -84,7 +106,15 @@ function parseCommentVariables (source, filename, list, emitter) {
     // account for previous insertions
     const newLineIndex = c.lineIndex + k
     const reference = `global.__instrumenter.variables[${c.index}].value`
-    const store = `${reference} = ${c.variable}`
+    let what
+    if (c.find === 'value') {
+      what = `${c.variable}`
+    } else if (c.find === 'type') {
+      what = `typeof ${c.variable}`
+    } else {
+      throw new Error(`Unknown info to find ${c.find} for variable ${c.variable}`)
+    }
+    const store = `${reference} = ${what}`
     lines.splice(newLineIndex + 1, 0, store)
   })
 

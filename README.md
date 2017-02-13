@@ -62,9 +62,11 @@ after that into the comment.
 const add = (a, b) => a + b
 add(2, 3) //>
 add(2, -3) //> ? anything here
-// you can also print variables!
+// you can also print variables
 const t = typeof add
 // t:
+// or variable types directly
+// add::
 ```
 
 Run the `comment-value` script which runs your Node
@@ -83,6 +85,7 @@ add(2, -3) //> -1
 // you can also print variables!
 const t = typeof add
 // t: "function"
+// add:: "function"
 ```
 
 ## Comment format
@@ -109,6 +112,17 @@ function add(a, b) {
   // b: 2
 }
 add(10, 2)
+```
+
+To print the type of a variable, use variable name followed by `::`, for
+example
+
+```js
+function add(a, b) {
+  // a:: "number"
+  // b:: "string"
+}
+add(10, 'foo')
 ```
 
 ## Composed functions
