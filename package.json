@@ -40,7 +40,7 @@
     "src/*.js",
     "!src/*-spec.js",
     "bin",
-    "images"
+    "images/*.png"
   ],
   "homepage": "https://github.com/bahmutov/comment-value#readme",
   "keywords": [
