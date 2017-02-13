@@ -11,3 +11,6 @@ function add(a, b) {
   return a + b
 }
 add(10, 2)
+
+// should ignore web links for example
+// https://github.com/bahmutov/comment-value/issues/25

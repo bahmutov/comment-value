@@ -71,9 +71,27 @@ describe('comment variable parser', () => {
     la(variable === 'foo', variable, 'from', s)
   })
 
+  it('finds variable with space after', () => {
+    const s = ' foo: '
+    const variable = findCommentVariable(s)
+    la(variable === 'foo', variable, 'from', s)
+  })
+
   it('finds fooBar', () => {
     const s = ' fooBar: whatever here'
     const variable = findCommentVariable(s)
     la(variable === 'fooBar', variable, 'from', s)
+  })
+
+  it('ignores http links', () => {
+    const s = 'http://foo.com'
+    const variable = findCommentVariable(s)
+    la(!variable, 'found variable name', variable, 'in', s)
+  })
+
+  it('ignores names with text after', () => {
+    const s = 'foo:no'
+    const variable = findCommentVariable(s)
+    la(!variable, 'found variable name', variable, 'in', s)
   })
 })

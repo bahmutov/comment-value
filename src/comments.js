@@ -21,7 +21,7 @@ function findCommentValue (s) {
 // tries to find the variable name (if any) used in special
 // comment, for example " fooBar: anything here" returns match "fooBar"
 function findCommentVariable (s) {
-  const r = /^ (\w+):/
+  const r = /^ (\w+):(?:\s+|\n|$)/
   const matches = r.exec(s)
   return matches && matches[1]
 }
