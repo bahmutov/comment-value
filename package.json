@@ -59,7 +59,9 @@
   "bin": {
     "cv": "bin/comment-value.sh",
     "comment-value": "bin/comment-value.sh",
-    "values": "bin/comment-value.js"
+    "values": "bin/comment-value.js",
+    "comment": "bin/comment-value.js",
+    "comments": "bin/comment-value.js"
   },
   "publishConfig": {
     "registry": "http://registry.npmjs.org/"

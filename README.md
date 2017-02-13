@@ -18,10 +18,10 @@ Read more about the problem and this tool solves it in blog post
 
 ## What does comment-value do?
 
-`comment-value` or `values` for short executes your Node program,
-instrumenting it on the fly. Every time it sees a special comment that
-starts with `//>`, it will set it value from whatever the expression
-immediately to its left is.
+`comment-value` (or available aliases `values`, `comment`, `comments`)
+executes your Node program, instrumenting it on the fly.
+Every time it sees a special comment that starts with `//>`,
+it will set it value from whatever the expression immediately to its left is.
 
 When Node finishes, the file is saved back with updated comments.
 
