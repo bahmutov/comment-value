@@ -13,6 +13,7 @@ script:
   - npm test
   - npm run test-variable
   - npm run test-types
+  - npm run test-types2
   - npm run test-comma
   - npm run hook
   - npm run test-console

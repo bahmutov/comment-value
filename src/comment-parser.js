@@ -3,6 +3,7 @@ const is = require('check-more-types')
 const comments = require('./comments')
 const {
   findCommentValue,
+  findCommentType,
   findCommentVariable,
   findCommentVariableType,
   isLineComment,
@@ -125,20 +126,36 @@ function initExpressionParser (filename, comments, emitter) {
   la(is.array(comments), 'missing list for output comments')
 
   const parseAsCommentValue = (text, start, end, from, to) => {
-    const commentStart = findCommentValue(text)
-    if (!commentStart) {
-      return
+    let commentStart
+    commentStart = findCommentValue(text)
+    if (commentStart) {
+      const comment = {
+        find: 'value',
+        value: undefined,
+        start,
+        text,
+        from,
+        to,
+        filename,
+        commentStart
+      }
+      return comment
     }
-    const comment = {
-      value: undefined,
-      start,
-      text,
-      from,
-      to,
-      filename,
-      commentStart
+
+    commentStart = findCommentType(text)
+    if (commentStart) {
+      const comment = {
+        find: 'type',
+        value: undefined,
+        start,
+        text,
+        from,
+        to,
+        filename,
+        commentStart
+      }
+      return comment
     }
-    return comment
   }
 
   const parserOptions = {

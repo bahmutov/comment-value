@@ -66,6 +66,32 @@ describe('comment variable type parser', () => {
   })
 })
 
+describe('findCommentValue', () => {
+  const {findCommentValue} = require('./comments')
+
+  it('finds a comment', () => {
+    const comment = '> foo'
+    const c = findCommentValue(comment)
+    la(c === '>', c, 'from', comment)
+  })
+
+  it('ignores type comments', () => {
+    const comment = ' ::'
+    const c = findCommentValue(comment)
+    la(!c, 'found wrong type', c, 'from', comment)
+  })
+})
+
+describe('findCommentType', () => {
+  const {findCommentType} = require('./comments')
+
+  it('finds a type comment', () => {
+    const comment = ' ::'
+    const c = findCommentType(comment)
+    la(c === ' ::', c, 'from', comment)
+  })
+})
+
 describe('comment variable parser', () => {
   const {findCommentVariable} = require('./comments')
   it('finds foo', () => {

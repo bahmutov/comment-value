@@ -14,8 +14,19 @@ function isWhiteSpace (text) {
 
 // finds which special comment start (if any) is present in the
 // given comment
+// for example //>
 function findCommentValue (s) {
   return R.find(c => s.startsWith(c), starts)
+}
+
+// finds if we want a type of the preceding expression
+// for example
+//   add(2, 3) // ::
+// will be
+//   add(2, 3) // :: number
+function findCommentType (s) {
+  const typeStarts = ['::', ' ::']
+  return R.find(c => s.startsWith(c), typeStarts)
 }
 
 // tries to find the variable name (if any) used in special
@@ -60,5 +71,6 @@ module.exports = {
   findCommentVariable,
   findCommentVariableType,
   isLineComment,
-  parseLineComment
+  parseLineComment,
+  findCommentType
 }
