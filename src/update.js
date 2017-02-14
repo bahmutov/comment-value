@@ -68,7 +68,10 @@ function updateFile (filename, results) {
     // console.log('updating line', line, 'with value', c.value)
     const k = line.indexOf(commentStart)
     la(k >= 0, 'line does not have comment', k, 'for comment', c)
-    const newComment = commentStart + ' ' + JSON.stringify(c.value)
+
+    const value = c.find === 'value' ? JSON.stringify(c.value) : c.type
+
+    const newComment = commentStart + ' ' + value
     const updatedLine = line.substr(0, k) + newComment
     lines[c.from.line - 1] = updatedLine
   }

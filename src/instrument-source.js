@@ -17,22 +17,25 @@ if (!global.instrument) {
 }
 const emitter = global.instrument
 
-function storeInIIFE (reference, value) {
+function storeInIIFE (reference, value, typeReference) {
   return `(function () {
     if (typeof ${value} === 'function') {
       return function () {
-        ${reference} = ${value}.apply(null, arguments)
+        ${reference} = ${value}.apply(null, arguments);
+        ${typeReference} = typeof ${reference};
         return ${reference}
       }
     } else {
       ${reference} = ${value};
+      ${typeReference} = typeof ${reference};
       return ${reference}
     }
   }())`
 }
-function storeInBlock (reference, value) {
-  const store = reference + ' = ' + value
-  return `;{ ${store}; ${reference} }`
+function storeInBlock (reference, value, typeReference) {
+  const store = `${reference} = ${value}`
+  const storeType = `${typeReference} = typeof ${reference}`
+  return `;{ ${store}; ${storeType}; ${reference} }`
 }
 
 function instrumentSource (source, filename) {
@@ -117,6 +120,7 @@ function instrumentSource (source, filename) {
         debug('will instrument "%s" for comment "%s"', node.source(), comment.text)
         comment.instrumented = true
         const reference = 'global.__instrumenter.comments[' + comment.index + '].value'
+        const typeReference = 'global.__instrumenter.comments[' + comment.index + '].type'
         if (isConsoleLogExpression(node)) {
           debug('instrumenting console.log', node.source())
           // instrument inside the console.log (the first argument)
@@ -137,18 +141,21 @@ function instrumentSource (source, filename) {
 
           let storeAndReturn
           if (node.parent.type === 'CallExpression') {
-            storeAndReturn = storeInIIFE(reference, value)
+            storeAndReturn = storeInIIFE(reference, value, typeReference)
             emitter.emit('wrap', value)
+            emitter.emit('wrap-node', {type: 'CallExpression', value})
           } else if (node.parent.type === 'MemberExpression') {
             // update the entire parent node
             const value = node.parent.source()
             emitter.emit('wrap', value)
-            let parentStore = storeInIIFE(reference, value)
+            emitter.emit('wrap-node', {type: 'MemberExpression', value})
+            let parentStore = storeInIIFE(reference, value, typeReference)
             node.parent.update(parentStore)
             return
           } else {
             emitter.emit('wrap', value)
-            storeAndReturn = storeInBlock(reference, value)
+            emitter.emit('wrap-node', {type: node.parent.type, value})
+            storeAndReturn = storeInBlock(reference, value, typeReference)
           }
 
           if (node.parent.parent &&

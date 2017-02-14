@@ -139,6 +139,20 @@ R.compose(
 )(-4) //=> 7
 ```
 
+## Mixing values and types
+
+You can record either values or types of values
+
+```js
+var R = require('ramda')
+R.compose(
+  Math.abs,     //:: number
+  R.add(1),     //=> -7
+  R.multiply(2) //=> -8
+)(-4)
+// :: number
+```
+
 ## Console log statements
 
 If the value comment is on the left of `console.log(value)` expression,

@@ -19,4 +19,18 @@ describe('expression type', () => {
     instrument(source)
     la(R.equals([' ::'], starts), starts)
   })
+
+  it('wraps the right expressions', () => {
+    const wraps = []
+    emitter.on('wrap', s => wraps.push(s))
+    instrument(source)
+    la(R.equals(['add(2, 3)'], wraps), wraps)
+  })
+
+  it('wraps the right AST node type', () => {
+    const nodeTypes = []
+    emitter.on('wrap-node', s => nodeTypes.push(s.type))
+    instrument(source)
+    la(R.equals(['ExpressionStatement'], nodeTypes), nodeTypes)
+  })
 })
